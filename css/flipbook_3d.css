@@ -1,0 +1,19 @@
+#page #flipbook-3d-settings-form #settings-general,
+#page #flipbook-3d-settings-form #settings-mobile {
+    float: left;
+    width: 48%;
+}
+
+.clear {
+    clear: both;
+}
+
+#flipbook-3d-node-form #ief-entity-table-edit-field-flipbook-3d-pages-und-entities .field-name-field-flipbook-3d-page-thumb img {
+    height: 64px;
+    width: auto;
+}
+
+#flipbook-3d-node-form #ief-entity-table-edit-field-flipbook-3d-pages-und-entities .field-name-field-flipbook-3d-page img {
+    height: 64px;
+    width: auto;
+}

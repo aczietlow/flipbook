@@ -1,0 +1,11 @@
+name = Real 3D Flipbook
+description = Adds flipbook functionality by using the Real 3D FlipBook jQuery plugin.
+core = 7.x
+package = Real 3D Flipbook
+
+configure = admin/config/media/flipbook
+
+dependencies[] = libraries
+dependencies[] = file
+dependencies[] = inline_entity_form
+dependencies[] = entityreference

@@ -137,7 +137,6 @@
       '#description'   => t('If the thumbnails will be displayed on start. Default : No'),
     );
 
-    // TODO: stes
     $form['settings']['right']['flipbook_3d_view_mode'] = array(
       '#type'          => 'select',
       '#title'         => t('View mode'),
@@ -145,6 +144,7 @@
       '#default_value' => variable_get('flipbook_3d_view_mode', '3d'),
       '#description'   => t('View mode for the flipbook. Default : 3d'),
     );
+
     $form['settings']['right']['flipbook_3d_shadow_1'] = array(
       '#type'          => 'select',
       '#title'         => t('Page shadow 1'),
@@ -152,6 +152,7 @@
       '#default_value' => variable_get('flipbook_3d_shadow_1', 'true'),
       '#description'   => t('Display page shadow 1. Default : Yes'),
     );
+
     $form['settings']['right']['flipbook_3d_shadow_2'] = array(
       '#type'          => 'select',
       '#title'         => t('Page shadow 2'),
@@ -159,6 +160,7 @@
       '#default_value' => variable_get('flipbook_3d_shadow_2', 'true'),
       '#description'   => t('Display page shadow 2. Default : Yes'),
     );
+
     $form['settings']['right']['flipbook_3d_shadow_3'] = array(
       '#type'          => 'select',
       '#title'         => t('Page shadow 3'),
@@ -434,10 +436,11 @@
 
   function _get_request_scheme() {
     $https_1 = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
-    $https_2 = isset($_SERVER['protossl']) && strlen($_SERVER['protossl']);
-    if($https_1 || $https_2) {
+    $https_2 = isset($_SERVER['protossl']) && drupal_strlen($_SERVER['protossl']);
+    if ($https_1 || $https_2) {
       return 'https://';
-    } else {
+    }
+    else {
       return 'http://';
     }
   }

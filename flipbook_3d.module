@@ -21,91 +21,28 @@
     $css_path = _get_module_path() . '/css/flipbook_3d.css';
     drupal_add_css($css_path);
 
+    $form['title'] = array(
+      '#markup' => '<h2>jQuery Real 3D FlipBook options</h2>',
+    );
+
+    $form['information'] = array(
+      '#markup' => '<div><p>' . t('Settings here reflect options you can modify on the jQuery plugin settings array. Proper functionality of the plugin can only be guaranteed by the plugin\'s author. That said, play with these options untill satisfied with the output.') . '</p></div>',
+    );
+
     $form['settings'] = array(
       '#type'   => 'container',
       '#prefix' => '<div id="settings">',
       '#suffix' => '</div><div class="clear"></div>',
     );
 
-    $form['settings']['general'] = array(
+    // Form left content
+    $form['settings']['left'] = array(
       '#type'   => 'container',
-      '#prefix' => '<div id="settings-general">',
+      '#prefix' => '<div id="settings-left">',
       '#suffix' => '</div>',
     );
 
-    $form['settings']['general']['flipbook_3d_style_css'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('FlipBook CSS styles URL'),
-      '#default_value' => variable_get('flipbook_3d_style_css', _get_library_url() . '/deploy/css/flipbook.style.css'),
-      '#description'   => t('URL for flipbook css styles. Default is to look at libraries location.'),
-      '#size'          => 100,
-    );
-
-    $form['settings']['general']['flipbook_3d_font_css'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Font Awesome CSS styles URL'),
-      '#default_value' => variable_get('flipbook_3d_font_css', _get_library_url() . '/deploy/css/font-awesome.css'),
-      '#description'   => t('URL for font awesome css styles. Default is to look at libraries location.'),
-      '#size'          => 100,
-    );
-
-    $form['settings']['general']['flipbook_3d_image_preloader'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Preloader image URL'),
-      '#default_value' => variable_get('flipbook_3d_image_preloader', _get_library_url() . '/deploy/images/preloader.jpg'),
-      '#description'   => t('URL for the preloader image. Default is to look at libraries location.'),
-      '#size'          => 100,
-    );
-
-    $form['settings']['general']['flipbook_3d_image_overlay'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Overlay image URL'),
-      '#default_value' => variable_get('flipbook_3d_image_overlay', _get_library_url() . '/deploy/images/overlay.jpg'),
-      '#description'   => t('URL for the overlay image. Default is to look at libraries location.'),
-      '#size'          => 100,
-    );
-
-    $form['settings']['general']['flipbook_3d_flip_mp3'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('MP3 file URL'),
-      '#default_value' => variable_get('flipbook_3d_flip_mp3', _get_library_url() . '/deploy/mp3/turnPage.mp3'),
-      '#description'   => t('URL for the mp3 sound file. Default is to look at libraries location.'),
-      '#size'          => 100,
-    );
-
-    $form['settings']['general']['flipbook_3d_rtl'] = array(
-      '#type'          => 'select',
-      '#title'         => t('Right to left'),
-      '#options' => array('false' => t('Left to right'), 'true' => t('Right to left')),
-      '#default_value' => variable_get('flipbook_3d_rtl', 'false'),
-      '#description'   => t('Defines if the book mode is normal left to right or right to left for eastern countries.'),
-    );
-
-    $form['settings']['general']['flipbook_3d_sounds'] = array(
-      '#type'          => 'select',
-      '#title'         => t('Sounds'),
-      '#options' => array('false' => t('Off'), 'true' => t('On')),
-      '#default_value' => variable_get('flipbook_3d_sounds', 'true'),
-      '#description'   => t('Defines if the sounds are enabled.'),
-    );
-
-    $form['settings']['general']['flipbook_3d_single_page'] = array(
-      '#type'          => 'select',
-      '#title'         => t('Page mode'),
-      '#options' => array('false' => t('Double page'), 'true' => t('Single page')),
-      '#default_value' => variable_get('flipbook_3d_single_page', 'false'),
-      '#description'   => t('If single page layout will be used instead of standard double page layout.'),
-    );
-
-    $form['settings']['general']['flipbook_3d_pdf_page_scale'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('PDF page scale'),
-      '#default_value' => variable_get('flipbook_3d_pdf_page_scale', '1.5'),
-      '#description'   => t('Set scale of pdf pages that will be rendered to images. Default is 1.5'),
-      '#size'          => 5,
-    );
-
-    $form['settings']['general']['flipbook_3d_skin'] = array(
+    $form['settings']['left']['flipbook_3d_skin'] = array(
       '#type'          => 'select',
       '#title'         => t('Skin'),
       '#options'       => array('light' => t('Light'), 'dark' => t('Dark')),
@@ -113,21 +50,214 @@
       '#description'   => t('Select the skin to use when displaying FlipBooks.'),
     );
 
-    $form['settings']['mobile'] = array(
+    $form['settings']['left']['flipbook_3d_rtl'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Right to left'),
+      '#options'       => array('false' => t('Left to right'), 'true' => t('Right to left')),
+      '#default_value' => variable_get('flipbook_3d_rtl', 'false'),
+      '#description'   => t('Defines if the book mode is normal left to right or right to left for eastern countries.'),
+    );
+
+    $form['settings']['left']['flipbook_3d_single_page'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Page mode'),
+      '#options'       => array('false' => t('Double page'), 'true' => t('Single page')),
+      '#default_value' => variable_get('flipbook_3d_single_page', 'false'),
+      '#description'   => t('If single page layout will be used instead of standard double page layout.'),
+    );
+
+    $form['settings']['left']['flipbook_3d_start_page'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Starting page'),
+      '#default_value' => variable_get('flipbook_3d_start_page', '1'),
+      '#description'   => t('Page that will be displayed when the book starts.'),
+      '#size'          => 5,
+    );
+
+    $form['settings']['left']['flipbook_3d_pdf_page_scale'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('PDF page scale'),
+      '#default_value' => variable_get('flipbook_3d_pdf_page_scale', '1.5'),
+      '#description'   => t('Set scale of pdf pages that will be rendered to images. Default is 1.5'),
+      '#size'          => 5,
+    );
+
+    $form['settings']['left']['flipbook_3d_page_width'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Page width'),
+      '#default_value' => variable_get('flipbook_3d_page_width', '1000'),
+      '#description'   => t('Page width in pixels (should be the same size as the page image width). Default: 1000'),
+      '#size'          => 5,
+    );
+
+    $form['settings']['left']['flipbook_3d_page_height'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Page height'),
+      '#default_value' => variable_get('flipbook_3d_page_height', '1414'),
+      '#description'   => t('Page height in pixels (should be the same size as the page image height). Default: 1414'),
+      '#size'          => 5,
+    );
+
+    $form['settings']['left']['flipbook_3d_thumb_width'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Thumbnail width'),
+      '#default_value' => variable_get('flipbook_3d_thumb_width', '100'),
+      '#description'   => t('Thumbnail width in pixels (should be the same size as the thumbnail image width). Default: 100'),
+      '#size'          => 5,
+    );
+
+    $form['settings']['left']['flipbook_3d_thumb_height'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Thumbnail height'),
+      '#default_value' => variable_get('flipbook_3d_thumb_height', '141'),
+      '#description'   => t('Thumbnail height in pixels (should be the same size as the thumbnail image height). Default: 141'),
+      '#size'          => 5,
+    );
+
+    // Form right content
+    $form['settings']['right'] = array(
       '#type'   => 'container',
-      '#prefix' => '<div id="settings-mobile">',
+      '#prefix' => '<div id="settings-right">',
       '#suffix' => '</div>',
+    );
+
+    $form['settings']['right']['flipbook_3d_content_on_start'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Content on start'),
+      '#options'       => array('false' => t('No'), 'true' => t('Yes')),
+      '#default_value' => variable_get('flipbook_3d_content_on_start', 'false'),
+      '#description'   => t('If the table of content will be displayed on start. Default : No'),
+    );
+
+    $form['settings']['right']['flipbook_3d_thumbs_on_start'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Thumbnails on start'),
+      '#options'       => array('false' => t('No'), 'true' => t('Yes')),
+      '#default_value' => variable_get('flipbook_3d_thumbs_on_start', 'false'),
+      '#description'   => t('If the thumbnails will be displayed on start. Default : No'),
+    );
+
+    // TODO: stes
+    $form['settings']['right']['flipbook_3d_view_mode'] = array(
+      '#type'          => 'select',
+      '#title'         => t('View mode'),
+      '#options'       => array('3d' => t('3D'), '2d' => t('2D')),
+      '#default_value' => variable_get('flipbook_3d_view_mode', '3d'),
+      '#description'   => t('View mode for the flipbook. Default : 3d'),
+    );
+    $form['settings']['right']['flipbook_3d_shadow_1'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Page shadow 1'),
+      '#options'       => array('false' => t('No'), 'true' => t('Yes')),
+      '#default_value' => variable_get('flipbook_3d_shadow_1', 'true'),
+      '#description'   => t('Display page shadow 1. Default : Yes'),
+    );
+    $form['settings']['right']['flipbook_3d_shadow_2'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Page shadow 2'),
+      '#options'       => array('false' => t('No'), 'true' => t('Yes')),
+      '#default_value' => variable_get('flipbook_3d_shadow_2', 'true'),
+      '#description'   => t('Display page shadow 2. Default : Yes'),
+    );
+    $form['settings']['right']['flipbook_3d_shadow_3'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Page shadow 3'),
+      '#options'       => array('false' => t('No'), 'true' => t('Yes')),
+      '#default_value' => variable_get('flipbook_3d_shadow_3', 'false'),
+      '#description'   => t('Display page shadow 3. Default : No'),
+    );
+
+    $form['settings']['right']['flipbook_3d_sounds'] = array(
+      '#type'          => 'select',
+      '#title'         => t('Sounds'),
+      '#options'       => array('false' => t('Off'), 'true' => t('On')),
+      '#default_value' => variable_get('flipbook_3d_sounds', 'true'),
+      '#description'   => t('Defines if the sounds are enabled.'),
+    );
+
+    $form['settings']['right']['flipbook_3d_flip_mp3'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('MP3 file URL'),
+      '#default_value' => variable_get('flipbook_3d_flip_mp3', _get_library_url() . '/deploy/mp3/turnPage.mp3'),
+      '#description'   => t('URL for the mp3 sound file. Default is to look at libraries location.'),
+      '#size'          => 80,
+    );
+
+    $form['settings']['right']['flipbook_3d_style_css'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('FlipBook CSS styles URL'),
+      '#default_value' => variable_get('flipbook_3d_style_css', _get_library_url() . '/deploy/css/flipbook.style.css'),
+      '#description'   => t('URL for flipbook css styles. Default is to look at libraries location.'),
+      '#size'          => 80,
+    );
+
+    $form['settings']['right']['flipbook_3d_font_css'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Font Awesome CSS styles URL'),
+      '#default_value' => variable_get('flipbook_3d_font_css', _get_library_url() . '/deploy/css/font-awesome.css'),
+      '#description'   => t('URL for font awesome css styles. Default is to look at libraries location.'),
+      '#size'          => 80,
+    );
+
+    $form['settings']['right']['flipbook_3d_image_preloader'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Preloader image URL'),
+      '#default_value' => variable_get('flipbook_3d_image_preloader', _get_library_url() . '/deploy/images/preloader.jpg'),
+      '#description'   => t('URL for the preloader image. Default is to look at libraries location.'),
+      '#size'          => 80,
+    );
+
+    $form['settings']['right']['flipbook_3d_image_overlay'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Overlay image URL'),
+      '#default_value' => variable_get('flipbook_3d_image_overlay', _get_library_url() . '/deploy/images/overlay.jpg'),
+      '#description'   => t('URL for the overlay image. Default is to look at libraries location.'),
+      '#size'          => 80,
     );
 
     return system_settings_form($form);
   }
 
   function flipbook_3d_settings_form_validate($form, &$form_state) {
-    if (!is_numeric($form_state['values']['flipbook_3d_pdf_page_scale'])) {
-      form_set_error('flipbook_3d_pdf_page_scale', t('PDF page scale must be a numeric value.'));
-    }
-    else {
-      $form_state['values']['flipbook_3d_pdf_page_scale'] = abs($form_state['values']['flipbook_3d_pdf_page_scale']);
+    $numeric_values = array(
+      'flipbook_3d_pdf_page_scale',
+      'flipbook_3d_start_page',
+      'flipbook_3d_page_width',
+      'flipbook_3d_page_height',
+      'flipbook_3d_thumb_width',
+      'flipbook_3d_thumb_height',
+    );
+    foreach ($numeric_values as $value) {
+      $human_value = str_replace('flipbook_3d_', '', $value);
+      $human_value = str_replace('_', ' ', $human_value);
+      if (!is_numeric($form_state['values'][$value])) {
+        form_set_error(
+          $value,
+          t(
+            'Value for :value must be numeric.',
+            array(':value' => $human_value)
+          )
+        );
+      }
+      elseif ($form_state['values'][$value] == 0) {
+        form_set_error(
+          $value,
+          t('Value for :value can\'t be zero.', array(':value' => $human_value))
+        );
+      }
+      elseif ($form_state['values'][$value] < 0) {
+        drupal_set_message(
+          t(
+            'Value for :value must be positive so it was automatically converted.',
+            array(':value' => $human_value)
+          ),
+          'warning'
+        );
+        $form_state['values'][$value] = abs($form_state['values'][$value]);
+      }
+      else {
+        // Everything checks out
+      }
     }
   }
 

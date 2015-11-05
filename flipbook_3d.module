@@ -432,10 +432,18 @@
     }
   }
 
+  function _get_request_scheme() {
+    $https_1 = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+    $https_2 = isset($_SERVER['protossl']) && strlen($_SERVER['protossl']);
+    if($https_1 || $https_2) {
+      return 'https://';
+    } else {
+      return 'http://';
+    }
+  }
+
   function _get_library_url() {
-    $request_scheme =
-      (isset($_SERVER['REQUEST_SCHEME']) && strlen($_SERVER['REQUEST_SCHEME']))
-        ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
+    $request_scheme = _get_request_scheme();
 
     return
       $request_scheme
@@ -444,9 +452,7 @@
   }
 
   function _get_module_url() {
-    $request_scheme =
-      (isset($_SERVER['REQUEST_SCHEME']) && strlen($_SERVER['REQUEST_SCHEME']))
-        ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
+    $request_scheme = _get_request_scheme();
 
     return
       $request_scheme

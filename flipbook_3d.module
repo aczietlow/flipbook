@@ -433,17 +433,23 @@
   }
 
   function _get_library_url() {
+    $request_scheme =
+      (isset($_SERVER['REQUEST_SCHEME']) && strlen($_SERVER['REQUEST_SCHEME']))
+        ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
+
     return
-      $_SERVER['REQUEST_SCHEME']
-      . '://'
+      $request_scheme
       . $_SERVER['SERVER_NAME']
       . '/sites/all/libraries/real-3d-flipbook';
   }
 
   function _get_module_url() {
+    $request_scheme =
+      (isset($_SERVER['REQUEST_SCHEME']) && strlen($_SERVER['REQUEST_SCHEME']))
+        ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
+
     return
-      $_SERVER['REQUEST_SCHEME']
-      . '://'
+      $request_scheme
       . $_SERVER['SERVER_NAME']
       . '/' . _get_module_path();
   }

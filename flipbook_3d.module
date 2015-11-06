@@ -26,7 +26,7 @@ function flipbook_3d_menu() {
  */
 function flipbook_3d_settings_form($form, &$form_state) {
 
-  $css_path = _get_module_path() . '/css/flipbook_3d.css';
+  $css_path = flipbook_3d_get_module_path() . '/css/flipbook_3d.css';
   drupal_add_css($css_path);
 
   $form['title'] = array(
@@ -188,7 +188,7 @@ function flipbook_3d_settings_form($form, &$form_state) {
   $form['settings']['right']['flipbook_3d_flip_mp3'] = array(
     '#type'          => 'textfield',
     '#title'         => t('MP3 file URL'),
-    '#default_value' => variable_get('flipbook_3d_flip_mp3', _get_library_url() . '/deploy/mp3/turnPage.mp3'),
+    '#default_value' => variable_get('flipbook_3d_flip_mp3', flipbook_3d_get_library_url() . '/deploy/mp3/turnPage.mp3'),
     '#description'   => t('URL for the mp3 sound file. Default is to look at libraries location.'),
     '#size'          => 80,
   );
@@ -196,7 +196,7 @@ function flipbook_3d_settings_form($form, &$form_state) {
   $form['settings']['right']['flipbook_3d_style_css'] = array(
     '#type'          => 'textfield',
     '#title'         => t('FlipBook CSS styles URL'),
-    '#default_value' => variable_get('flipbook_3d_style_css', _get_library_url() . '/deploy/css/flipbook.style.css'),
+    '#default_value' => variable_get('flipbook_3d_style_css', flipbook_3d_get_library_url() . '/deploy/css/flipbook.style.css'),
     '#description'   => t('URL for flipbook css styles. Default is to look at libraries location.'),
     '#size'          => 80,
   );
@@ -204,7 +204,7 @@ function flipbook_3d_settings_form($form, &$form_state) {
   $form['settings']['right']['flipbook_3d_font_css'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Font Awesome CSS styles URL'),
-    '#default_value' => variable_get('flipbook_3d_font_css', _get_library_url() . '/deploy/css/font-awesome.css'),
+    '#default_value' => variable_get('flipbook_3d_font_css', flipbook_3d_get_library_url() . '/deploy/css/font-awesome.css'),
     '#description'   => t('URL for font awesome css styles. Default is to look at libraries location.'),
     '#size'          => 80,
   );
@@ -212,7 +212,7 @@ function flipbook_3d_settings_form($form, &$form_state) {
   $form['settings']['right']['flipbook_3d_image_preloader'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Preloader image URL'),
-    '#default_value' => variable_get('flipbook_3d_image_preloader', _get_library_url() . '/deploy/images/preloader.jpg'),
+    '#default_value' => variable_get('flipbook_3d_image_preloader', flipbook_3d_get_library_url() . '/deploy/images/preloader.jpg'),
     '#description'   => t('URL for the preloader image. Default is to look at libraries location.'),
     '#size'          => 80,
   );
@@ -220,7 +220,7 @@ function flipbook_3d_settings_form($form, &$form_state) {
   $form['settings']['right']['flipbook_3d_image_overlay'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Overlay image URL'),
-    '#default_value' => variable_get('flipbook_3d_image_overlay', _get_library_url() . '/deploy/images/overlay.jpg'),
+    '#default_value' => variable_get('flipbook_3d_image_overlay', flipbook_3d_get_library_url() . '/deploy/images/overlay.jpg'),
     '#description'   => t('URL for the overlay image. Default is to look at libraries location.'),
     '#size'          => 80,
   );
@@ -228,6 +228,9 @@ function flipbook_3d_settings_form($form, &$form_state) {
   return system_settings_form($form);
 }
 
+/**
+ * Implements hook_validate().
+ */
 function flipbook_3d_settings_form_validate($form, &$form_state) {
   $numeric_values = array(
     'flipbook_3d_pdf_page_scale',
@@ -354,8 +357,8 @@ function flipbook_3d_node_validate($node, $form, &$form_state) {
       $flipbook_from_pdf
         = ($form_state['values']['field_flipbook_3d_pdf_pages'][LANGUAGE_NONE][0]['fid'] == 0)
         ? FALSE : TRUE;
-      $flipbook_from_images =
-        isset($form_state['values']['field_flipbook_3d_pages'][LANGUAGE_NONE]['entities']);
+      $flipbook_from_images
+        = isset($form_state['values']['field_flipbook_3d_pages'][LANGUAGE_NONE]['entities']);
       $par_pages = $flipbook_from_images ? (count(
           $form_state['values']['field_flipbook_3d_pages'][LANGUAGE_NONE]['entities']
         ) % 2 == 0) ? TRUE : FALSE : FALSE;
@@ -404,6 +407,7 @@ function flipbook_3d_libraries_info() {
 }
 
 /**
+ * Validate library version or return TRUE.
  * @return bool
  */
 function flipbook_3d_libraries_get_version() {
@@ -414,7 +418,7 @@ function flipbook_3d_libraries_get_version() {
  * Implements hook_inline_entity_form_table_fields_alter().
  */
 function flipbook_3d_inline_entity_form_table_fields_alter(&$fields, $context) {
-  $css_path = _get_module_path() . '/css/flipbook_3d.css';
+  $css_path = flipbook_3d_get_module_path() . '/css/flipbook_3d.css';
   drupal_add_css($css_path);
   $flipbook_3d_page = FALSE;
   foreach ($context['allowed_bundles'] as $bundle) {
@@ -439,9 +443,11 @@ function flipbook_3d_inline_entity_form_table_fields_alter(&$fields, $context) {
 }
 
 /**
+ * Get server request scheme.
+ *
  * @return string
  */
-function _get_request_scheme() {
+function flipbook_3d_get_request_scheme() {
   $https_1 = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
   $https_2 = isset($_SERVER['protossl']) && drupal_strlen($_SERVER['protossl']);
   if ($https_1 || $https_2) {
@@ -453,10 +459,12 @@ function _get_request_scheme() {
 }
 
 /**
+ * Get url for the library.
+ *
  * @return string
  */
-function _get_library_url() {
-  $request_scheme = _get_request_scheme();
+function flipbook_3d_get_library_url() {
+  $request_scheme = flipbook_3d_get_request_scheme();
 
   return
     $request_scheme
@@ -465,29 +473,35 @@ function _get_library_url() {
 }
 
 /**
+ * Get the module's url.
+ *
  * @return string
  */
-function _get_module_url() {
-  $request_scheme = _get_request_scheme();
+function flipbook_3d_get_module_url() {
+  $request_scheme = flipbook_3d_get_request_scheme();
 
   return
     $request_scheme
     . $_SERVER['SERVER_NAME']
-    . '/' . _get_module_path();
+    . '/' . flipbook_3d_get_module_path();
 }
 
 /**
+ * Get the module's path.
+ *
  * @return string
  */
-function _get_module_path() {
+function flipbook_3d_get_module_path() {
   return drupal_get_path('module', 'flipbook_3d');
 }
 
 /**
+ * Get the module's absolute path.
+ *
  * @return string
  */
-function _get_module_absolute_path() {
-  $module_path = _get_module_path();
+function flipbook_3d_get_module_absolute_path() {
+  $module_path = flipbook_3d_get_module_path();
 
   return DRUPAL_ROOT . DIRECTORY_SEPARATOR . $module_path;
 }

@@ -5,9 +5,11 @@
  */
 
 /**
+ * Check if expected library path exists.
+ *
  * @return array
  */
-function _flipbook_3d_check_lib_path() {
+function flipbook_3d_check_lib_path() {
   $ds = DIRECTORY_SEPARATOR;
   $lib_path =
     DRUPAL_ROOT . $ds . 'sites' . $ds . 'all'
@@ -48,8 +50,7 @@ function flipbook_3d_requirements($phase) {
   $t = get_t();
   switch ($phase) {
     case 'install':
-      return _flipbook_3d_check_lib_path();
-      break;
+      return flipbook_3d_check_lib_path();
 
     case 'runtime':
       $library = libraries_detect('real-3d-flipbook');
@@ -75,15 +76,12 @@ function flipbook_3d_requirements($phase) {
           ),
         );
       }
-      break;
 
     case 'update':
-      return _flipbook_3d_check_lib_path();
-      break;
+      return flipbook_3d_check_lib_path();
 
     default:
       return array();
-      break;
 
   }
 }
@@ -100,22 +98,22 @@ function flipbook_3d_install() {
         case 'flipbook_3d':
           // Fields.
           field_create_field(
-            _flipbook_3d_fields()['field_flipbook_3d_cover']['field']
+            flipbook_3d_fields()['field_flipbook_3d_cover']['field']
           );
           field_create_instance(
-            _flipbook_3d_fields()['field_flipbook_3d_cover']['instance']
+            flipbook_3d_fields()['field_flipbook_3d_cover']['instance']
           );
           field_create_field(
-            _flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['field']
+            flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['field']
           );
           field_create_instance(
-            _flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['instance']
+            flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['instance']
           );
           field_create_field(
-            _flipbook_3d_fields()['field_flipbook_3d_pages']['field']
+            flipbook_3d_fields()['field_flipbook_3d_pages']['field']
           );
           field_create_instance(
-            _flipbook_3d_fields()['field_flipbook_3d_pages']['instance']
+            flipbook_3d_fields()['field_flipbook_3d_pages']['instance']
           );
           variable_set('comment_flipbook_3d', COMMENT_NODE_CLOSED);
           variable_set('node_options_flipbook_3d', array('status'));
@@ -124,16 +122,16 @@ function flipbook_3d_install() {
         case 'flipbook_3d_page':
           // Fields.
           field_create_field(
-            _flipbook_3d_fields()['field_flipbook_3d_page_thumb']['field']
+            flipbook_3d_fields()['field_flipbook_3d_page_thumb']['field']
           );
           field_create_instance(
-            _flipbook_3d_fields()['field_flipbook_3d_page_thumb']['instance']
+            flipbook_3d_fields()['field_flipbook_3d_page_thumb']['instance']
           );
           field_create_field(
-            _flipbook_3d_fields()['field_flipbook_3d_page']['field']
+            flipbook_3d_fields()['field_flipbook_3d_page']['field']
           );
           field_create_instance(
-            _flipbook_3d_fields()['field_flipbook_3d_page']['instance']
+            flipbook_3d_fields()['field_flipbook_3d_page']['instance']
           );
           variable_set('comment_flipbook_3d_page', COMMENT_NODE_CLOSED);
           variable_set('node_options_flipbook_3d_page', array('status'));
@@ -164,7 +162,7 @@ function flipbook_3d_uninstall() {
       variable_del("comment_$type");
       variable_del("node_options_$type");
       variable_del("node_submitted_$type");
-      foreach (_flipbook_3d_fields() as $field_name => $data) {
+      foreach (flipbook_3d_fields() as $field_name => $data) {
         switch ($data['instance']['bundle']) {
           case $type:
             try {
@@ -185,11 +183,16 @@ function flipbook_3d_uninstall() {
   db_delete('variable')->condition('name', 'flipbook_3d_%', 'LIKE');
 }
 
-function _flipbook_3d_fields() {
-  // Save fields here to return
+/**
+ * Defines the fields that the module uses on its content types
+ *
+ * @return array
+ */
+function flipbook_3d_fields() {
+  // Save fields here to return.
   $fields_data = array();
 
-  // Magazine cover
+  // Magazine cover.
   $field_name = 'field_flipbook_3d_cover';
 
   $settings = array(
@@ -229,7 +232,7 @@ function _flipbook_3d_fields() {
     'instance' => $instance,
   );
 
-  // Magazine pages by PDF
+  // Magazine pages by PDF.
   $field_name = 'field_flipbook_3d_pdf_pages';
 
   $settings = array(
@@ -270,7 +273,7 @@ function _flipbook_3d_fields() {
     'instance' => $instance,
   );
 
-  // Magazine pages
+  // Magazine pages.
   $field_name = 'field_flipbook_3d_pages';
 
   $settings = array(
@@ -315,7 +318,7 @@ function _flipbook_3d_fields() {
     'instance' => $instance,
   );
 
-  // Magazine page thumb
+  // Magazine page thumb.
   $field_name = 'field_flipbook_3d_page_thumb';
 
   $settings = array(
@@ -344,7 +347,8 @@ function _flipbook_3d_fields() {
     'settings'    => $settings,
     'display'     => array(
       'default' => array(
-        'label' => 'hidden', 'type' => 'image',
+        'label' => 'hidden',
+        'type' => 'image',
       ),
     ),
   );
@@ -354,7 +358,7 @@ function _flipbook_3d_fields() {
     'instance' => $instance,
   );
 
-  // Magazine page page
+  // Magazine page page.
   $field_name = 'field_flipbook_3d_page';
 
   $settings = array(
@@ -383,7 +387,8 @@ function _flipbook_3d_fields() {
     'settings'    => $settings,
     'display'     => array(
       'default' => array(
-        'label' => 'hidden', 'type' => 'image',
+        'label' => 'hidden',
+        'type' => 'image',
       ),
     ),
   );

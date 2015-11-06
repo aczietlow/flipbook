@@ -107,10 +107,9 @@
     switch ($view_mode) :
       case 'full': ?>
         <link rel="stylesheet" type="text/css"
-              href="<?php print check_plain(variable_get('flipbook_3d_style_css', _get_library_url() . '/deploy/css/flipbook.style.css')); ?>">
+              href="<?php print check_plain(variable_get('flipbook_3d_style_css', flipbook_3d_get_library_url() . '/deploy/css/flipbook.style.css')); ?>">
         <link rel="stylesheet" type="text/css"
-              href="<?php print check_plain(variable_get('flipbook_3d_font_css', _get_library_url() . '/deploy/css/font-awesome.css')); ?>">
-        <!--<script type="text/javascript" src="<?php /*print _get_module_url() . '/js/flipbook_3d.js'; */ ?>"></script>-->
+              href="<?php print check_plain(variable_get('flipbook_3d_font_css', flipbook_3d_get_library_url() . '/deploy/css/font-awesome.css')); ?>">
       <?php
       $pdf = FALSE;
       $images = FALSE;
@@ -168,9 +167,9 @@
                 <?php endif; ?>
                 skin: '<?php print check_plain(variable_get('flipbook_3d_skin', 'light')); ?>',
                 assets: {
-                  preloader: '<?php print check_plain(variable_get('flipbook_3d_image_preloader', _get_library_url() . '/deploy/images/preloader.jpg')); ?>',
-                  overlay: '<?php print check_plain(variable_get('flipbook_3d_image_overlay', _get_library_url() . '/deploy/images/overlay.jpg')); ?>',
-                  flipMp3: '<?php print check_plain(variable_get('flipbook_3d_flip_mp3', _get_library_url() . '/deploy/mp3/turnPage.mp3')); ?>'
+                  preloader: '<?php print check_plain(variable_get('flipbook_3d_image_preloader', flipbook_3d_get_library_url() . '/deploy/images/preloader.jpg')); ?>',
+                  overlay: '<?php print check_plain(variable_get('flipbook_3d_image_overlay', flipbook_3d_get_library_url() . '/deploy/images/overlay.jpg')); ?>',
+                  flipMp3: '<?php print check_plain(variable_get('flipbook_3d_flip_mp3', flipbook_3d_get_library_url() . '/deploy/mp3/turnPage.mp3')); ?>'
                 },
                 rightToLeft: <?php print check_plain(variable_get('flipbook_3d_rtl', 'false')); ?>,
                 startPage: <?php print check_plain(variable_get('flipbook_3d_start_page', '1')); ?>,

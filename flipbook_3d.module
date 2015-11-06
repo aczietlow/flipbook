@@ -381,6 +381,7 @@ function flipbook_3d_node_validate($node, $form, &$form_state) {
         );
       }
       break;
+
     default:
       break;
   }
@@ -444,7 +445,6 @@ function flipbook_3d_inline_entity_form_table_fields_alter(&$fields, $context) {
 
 /**
  * Get server request scheme.
- *
  * @return string
  */
 function flipbook_3d_get_request_scheme() {
@@ -460,7 +460,6 @@ function flipbook_3d_get_request_scheme() {
 
 /**
  * Get url for the library.
- *
  * @return string
  */
 function flipbook_3d_get_library_url() {
@@ -474,7 +473,6 @@ function flipbook_3d_get_library_url() {
 
 /**
  * Get the module's url.
- *
  * @return string
  */
 function flipbook_3d_get_module_url() {
@@ -488,7 +486,6 @@ function flipbook_3d_get_module_url() {
 
 /**
  * Get the module's path.
- *
  * @return string
  */
 function flipbook_3d_get_module_path() {
@@ -497,7 +494,6 @@ function flipbook_3d_get_module_path() {
 
 /**
  * Get the module's absolute path.
- *
  * @return string
  */
 function flipbook_3d_get_module_absolute_path() {

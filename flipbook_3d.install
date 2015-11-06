@@ -6,13 +6,12 @@
 
 /**
  * Check if expected library path exists.
- *
  * @return array
  */
 function flipbook_3d_check_lib_path() {
   $ds = DIRECTORY_SEPARATOR;
-  $lib_path =
-    DRUPAL_ROOT . $ds . 'sites' . $ds . 'all'
+  $lib_path
+    = DRUPAL_ROOT . $ds . 'sites' . $ds . 'all'
     . $ds . 'libraries' . $ds . 'real-3d-flipbook'
     . $ds . 'source' . $ds . 'js' . $ds . 'flipbook.js';
   $file_exists = file_exists($lib_path);
@@ -119,6 +118,7 @@ function flipbook_3d_install() {
           variable_set('node_options_flipbook_3d', array('status'));
           variable_set('node_submitted_flipbook_3d', 0);
           break;
+
         case 'flipbook_3d_page':
           // Fields.
           field_create_field(
@@ -138,7 +138,8 @@ function flipbook_3d_install() {
           variable_set('node_submitted_flipbook_3d_page', 0);
           break;
       }
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
     }
   }
@@ -168,7 +169,8 @@ function flipbook_3d_uninstall() {
             try {
               field_delete_field($field_name);
               field_delete_instance($data['instance']);
-            } catch (Exception $e) {
+            }
+            catch (Exception $e) {
               watchdog(
                 'debug', $e->getMessage() . ' >> ' . $e->getTraceAsString()
               );
@@ -176,7 +178,8 @@ function flipbook_3d_uninstall() {
             break;
         }
       }
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
     }
   }
@@ -185,7 +188,6 @@ function flipbook_3d_uninstall() {
 
 /**
  * Defines the fields that the module uses on its content types
- *
  * @return array
  */
 function flipbook_3d_fields() {
@@ -308,7 +310,7 @@ function flipbook_3d_fields() {
     'display'     => array(
       'default' => array(
         'label' => 'hidden',
-        'type' => 'entityreference_label',
+        'type'  => 'entityreference_label',
       ),
     ),
   );
@@ -348,7 +350,7 @@ function flipbook_3d_fields() {
     'display'     => array(
       'default' => array(
         'label' => 'hidden',
-        'type' => 'image',
+        'type'  => 'image',
       ),
     ),
   );
@@ -388,7 +390,7 @@ function flipbook_3d_fields() {
     'display'     => array(
       'default' => array(
         'label' => 'hidden',
-        'type' => 'image',
+        'type'  => 'image',
       ),
     ),
   );

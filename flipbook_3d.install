@@ -3,8 +3,6 @@
    * @file
    * Install/uninstall specific functions
    */
-?>
-<?php
 
   /**
    * @return array

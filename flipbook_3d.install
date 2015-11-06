@@ -1,394 +1,397 @@
 <?php
-  /**
-   * @file
-   * Install/uninstall specific functions
-   */
+/**
+ * @file
+ * Install/uninstall specific functions.
+ */
 
-  /**
-   * @return array
-   */
-  function _flipbook_3d_check_lib_path() {
-    $ds = DIRECTORY_SEPARATOR;
-    $lib_path =
-      DRUPAL_ROOT . $ds . 'sites' . $ds . 'all'
-      . $ds . 'libraries' . $ds . 'real-3d-flipbook'
-      . $ds . 'source' . $ds . 'js' . $ds . 'flipbook.js';
-    $file_exists = file_exists($lib_path);
-    $is_file = is_file($lib_path);
-    $is_readable = is_readable($lib_path);
-    if ($file_exists && $is_file && $is_readable) {
-      return array(
-        'flipbook_3d' => array(
-          'title'       => t('Real 3D Flipbook'),
-          'value'       => '',
-          'description' => t('The Real 3D Flipbook library is installed.'),
-          'severity'    => REQUIREMENT_OK,
+/**
+ * @return array
+ */
+function _flipbook_3d_check_lib_path() {
+  $ds = DIRECTORY_SEPARATOR;
+  $lib_path =
+    DRUPAL_ROOT . $ds . 'sites' . $ds . 'all'
+    . $ds . 'libraries' . $ds . 'real-3d-flipbook'
+    . $ds . 'source' . $ds . 'js' . $ds . 'flipbook.js';
+  $file_exists = file_exists($lib_path);
+  $is_file = is_file($lib_path);
+  $is_readable = is_readable($lib_path);
+  if ($file_exists && $is_file && $is_readable) {
+    return array(
+      'flipbook_3d' => array(
+        'title'       => t('Real 3D Flipbook'),
+        'value'       => '',
+        'description' => t('The Real 3D Flipbook library is installed.'),
+        'severity'    => REQUIREMENT_OK,
+      ),
+    );
+  }
+  else {
+    return array(
+      'flipbook_3d' => array(
+        'title'       => t('Real 3D Flipbook'),
+        'value'       => '',
+        'description' => t(
+          'You must add the Real 3D FlipBook library for this module to work. Extract files so that <i><strong>flipbook.js</strong></i> resides at <i><strong>:lib_path</strong></i> and try again.',
+          array(':lib_path' => $lib_path)
         ),
-      );
-    }
-    else {
-      return array(
-        'flipbook_3d' => array(
-          'title'       => t('Real 3D Flipbook'),
-          'value'       => '',
-          'description' => t(
-            'You must add the Real 3D FlipBook library for this module to work. Extract files so that <i><strong>flipbook.js</strong></i> resides at <i><strong>:lib_path</strong></i> and try again.'
-            , array(':lib_path' => $lib_path)
+        'severity'    => REQUIREMENT_ERROR,
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function flipbook_3d_requirements($phase) {
+  $t = get_t();
+  switch ($phase) {
+    case 'install':
+      return _flipbook_3d_check_lib_path();
+      break;
+
+    case 'runtime':
+      $library = libraries_detect('real-3d-flipbook');
+      if (isset($library['installed']) && $library['installed']) {
+        return array(
+          'flipbook_3d' => array(
+            'title'       => $t('Real 3D Flipbook'),
+            'value'       => '',
+            'description' => $t('The Real 3D Flipbook library is installed.'),
+            'severity'    => REQUIREMENT_OK,
           ),
-          'severity'    => REQUIREMENT_ERROR,
-        ),
-      );
-    }
-  }
-
-  /**
-   * Implements hook_requirements().
-   *
-   * @param string $phase
-   *
-   * @return array
-   */
-  function flipbook_3d_requirements($phase) {
-    $t = get_t();
-    switch ($phase) {
-      case 'install':
-        return _flipbook_3d_check_lib_path();
-        break;
-      case 'runtime':
-        $library = libraries_detect('real-3d-flipbook');
-        if (isset($library['installed']) && $library['installed']) {
-          return array(
-            'flipbook_3d' => array(
-              'title'       => $t('Real 3D Flipbook'),
-              'value'       => '',
-              'description' => $t('The Real 3D Flipbook library is installed.'),
-              'severity'    => REQUIREMENT_OK,
-            ),
-          );
-        }
-        else {
-          return array(
-            'flipbook_3d' => array(
-              'title'       => $t('Real 3D Flipbook'),
-              'value'       => '',
-              'description' => $t(
-                'The Real 3D Flipbook library was not found. Extract files so that they reside at <i>sites/all/libraries/real-3d-flipbook</i> and check status afterwards.'
-              ),
-              'severity'    => REQUIREMENT_ERROR,
-            ),
-          );
-        }
-        break;
-      case 'update':
-        return _flipbook_3d_check_lib_path();
-        break;
-      default:
-        return array();
-        break;
-    }
-  }
-
-  /**
-   * Implements hook_install().
-   */
-  function flipbook_3d_install() {
-    node_types_rebuild();
-    $node_types = node_type_get_types();
-    foreach ($node_types as $type) {
-      try {
-        switch ($type->type) {
-          case 'flipbook_3d':
-            // Fields
-            field_create_field(
-              _flipbook_3d_fields()['field_flipbook_3d_cover']['field']
-            );
-            field_create_instance(
-              _flipbook_3d_fields()['field_flipbook_3d_cover']['instance']
-            );
-            field_create_field(
-              _flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['field']
-            );
-            field_create_instance(
-              _flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['instance']
-            );
-            field_create_field(
-              _flipbook_3d_fields()['field_flipbook_3d_pages']['field']
-            );
-            field_create_instance(
-              _flipbook_3d_fields()['field_flipbook_3d_pages']['instance']
-            );
-            variable_set('comment_flipbook_3d', COMMENT_NODE_CLOSED);
-            variable_set('node_options_flipbook_3d', array('status'));
-            variable_set('node_submitted_flipbook_3d', 0);
-            break;
-          case 'flipbook_3d_page':
-            // Fields
-            field_create_field(
-              _flipbook_3d_fields()['field_flipbook_3d_page_thumb']['field']
-            );
-            field_create_instance(
-              _flipbook_3d_fields()['field_flipbook_3d_page_thumb']['instance']
-            );
-            field_create_field(
-              _flipbook_3d_fields()['field_flipbook_3d_page']['field']
-            );
-            field_create_instance(
-              _flipbook_3d_fields()['field_flipbook_3d_page']['instance']
-            );
-            variable_set('comment_flipbook_3d_page', COMMENT_NODE_CLOSED);
-            variable_set('node_options_flipbook_3d_page', array('status'));
-            variable_set('node_submitted_flipbook_3d_page', 0);
-            break;
-        }
-      } catch (Exception $e) {
-        watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
+        );
       }
-    }
-  }
-
-  /**
-   * Implements hook_uninstall().
-   */
-  function flipbook_3d_uninstall() {
-    drupal_load('module', 'flipbook_3d');
-    $node_types = flipbook_3d_node_info();
-    foreach ($node_types as $type => $info) {
-      try {
-        $sql = 'SELECT n.nid FROM {node} n WHERE n.type = :type;';
-        $result = db_query($sql, array(':type' => $type));
-        $nids = array();
-        foreach ($result as $row) {
-          $nids[] = $row->nid;
-        }
-        node_delete_multiple($nids);
-        variable_del("comment_$type");
-        variable_del("node_options_$type");
-        variable_del("node_submitted_$type");
-        foreach (_flipbook_3d_fields() as $field_name => $data) {
-          switch ($data['instance']['bundle']) {
-            case $type:
-              try {
-                field_delete_field($field_name);
-                field_delete_instance($data['instance']);
-              } catch (Exception $e) {
-                watchdog(
-                  'debug', $e->getMessage() . ' >> ' . $e->getTraceAsString()
-                );
-              }
-              break;
-          }
-        }
-      } catch (Exception $e) {
-        watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
-      }
-    }
-    db_delete('variable')->condition('name', 'flipbook_3d_%', 'LIKE');
-  }
-
-  function _flipbook_3d_fields() {
-    // Save fields here to return
-    $fields_data = array();
-
-    // Magazine cover
-    $field_name = 'field_flipbook_3d_cover';
-
-    $settings = array(
-      'file_extensions' => 'png jpg',
-      'file_directory'  => 'flipbook_3d_files/covers',
-    );
-
-    $field = array(
-      'field_name'  => $field_name,
-      'cardinality' => 1,
-      'type'        => 'image',
-      'uri_scheme'  => 'public',
-      'settings'    => $settings,
-    );
-
-    $instance = array(
-      'field_name'  => $field_name,
-      'entity_type' => 'node',
-      'bundle'      => 'flipbook_3d',
-      'label'       => t('Cover'),
-      'required'    => TRUE,
-      'description' => t('Upload the flipbook cover.'),
-      'widget'      => array(
-        'type' => 'image_image',
-      ),
-      'settings'    => $settings,
-      'display'     => array(
-        'default' => array(
-          'label' => 'hidden', 'type' => 'image',
-        ),
-      ),
-    );
-
-    $fields_data[$field_name] = array(
-      'field'    => $field,
-      'instance' => $instance,
-    );
-
-    // Magazine pages by PDF
-    $field_name = 'field_flipbook_3d_pdf_pages';
-
-    $settings = array(
-      'file_extensions' => 'pdf',
-      'file_directory'  => 'flipbook_3d_files/pages/pdf',
-    );
-
-    $field = array(
-      'field_name'  => $field_name,
-      'cardinality' => 1,
-      'type'        => 'file',
-      'settings'    => $settings,
-    );
-
-    $instance = array(
-      'field_name'  => $field_name,
-      'entity_type' => 'node',
-      'bundle'      => 'flipbook_3d',
-      'label'       => t('PDF book'),
-      'required'    => FALSE,
-      'description' => t(
-        'Upload a PDF file if you wish to create pages through this method. This overrides pages created through images.'
-      ),
-      'widget'      => array(
-        'type' => 'file_generic',
-      ),
-      'settings'    => $settings,
-      'display'     => array(
-        'default' => array(
-          'label' => 'hidden', 'type' => 'file_default',
-        ),
-      ),
-    );
-
-    $fields_data[$field_name] = array(
-      'field'    => $field,
-      'instance' => $instance,
-    );
-
-    // Magazine pages
-    $field_name = 'field_flipbook_3d_pages';
-
-    $settings = array(
-      'target_type'      => 'node',
-      'handler_settings' => array('target_bundles' => array('flipbook_3d_page')),
-    );
-
-    $field = array(
-      'field_name'  => $field_name,
-      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
-      'type'        => 'entityreference',
-      'settings'    => $settings,
-    );
-
-    $instance = array(
-      'field_name'  => $field_name,
-      'entity_type' => 'node',
-      'bundle'      => 'flipbook_3d',
-      'label'       => t('Pages'),
-      'required'    => FALSE,
-      'description' => t('Add pages via PNG or JPG images.'),
-      'widget'      => array(
-        'type'     => 'inline_entity_form',
-        'settings' => array(
-          'type_settings' => array(
-            'allow_new'         => TRUE,
-            'delete_references' => TRUE,
+      else {
+        return array(
+          'flipbook_3d' => array(
+            'title'       => $t('Real 3D Flipbook'),
+            'value'       => '',
+            'description' => $t(
+              'The Real 3D Flipbook library was not found. Extract files so that they reside at <i>sites/all/libraries/real-3d-flipbook</i> and check status afterwards.'
+            ),
+            'severity'    => REQUIREMENT_ERROR,
           ),
-        ),
-      ),
-      'settings'    => $settings,
-      'display'     => array(
-        'default' => array(
-          'label' => 'hidden', 'type' => 'entityreference_label',
-        ),
-      ),
-    );
+        );
+      }
+      break;
 
-    $fields_data[$field_name] = array(
-      'field'    => $field,
-      'instance' => $instance,
-    );
+    case 'update':
+      return _flipbook_3d_check_lib_path();
+      break;
 
-    // Magazine page thumb
-    $field_name = 'field_flipbook_3d_page_thumb';
+    default:
+      return array();
+      break;
 
-    $settings = array(
-      'file_extensions' => 'png jpg',
-      'file_directory'  => 'flipbook_3d_files/thumbnails',
-    );
-
-    $field = array(
-      'field_name'  => $field_name,
-      'cardinality' => 1,
-      'type'        => 'image',
-      'uri_scheme'  => 'public',
-      'settings'    => $settings,
-    );
-
-    $instance = array(
-      'field_name'  => $field_name,
-      'entity_type' => 'node',
-      'bundle'      => 'flipbook_3d_page',
-      'label'       => t('Thumbnail'),
-      'required'    => TRUE,
-      'description' => t('Upload the page thumbnail.'),
-      'widget'      => array(
-        'type' => 'image_image',
-      ),
-      'settings'    => $settings,
-      'display'     => array(
-        'default' => array(
-          'label' => 'hidden', 'type' => 'image',
-        ),
-      ),
-    );
-
-    $fields_data[$field_name] = array(
-      'field'    => $field,
-      'instance' => $instance,
-    );
-
-    // Magazine page page
-    $field_name = 'field_flipbook_3d_page';
-
-    $settings = array(
-      'file_extensions' => 'png jpg',
-      'file_directory'  => 'flipbook_3d_files/pages/images',
-    );
-
-    $field = array(
-      'field_name'  => $field_name,
-      'cardinality' => 1,
-      'type'        => 'image',
-      'uri_scheme'  => 'public',
-      'settings'    => $settings,
-    );
-
-    $instance = array(
-      'field_name'  => $field_name,
-      'entity_type' => 'node',
-      'bundle'      => 'flipbook_3d_page',
-      'label'       => t('Page'),
-      'required'    => TRUE,
-      'description' => t('Upload the page.'),
-      'widget'      => array(
-        'type' => 'image_image',
-      ),
-      'settings'    => $settings,
-      'display'     => array(
-        'default' => array(
-          'label' => 'hidden', 'type' => 'image',
-        ),
-      ),
-    );
-
-    $fields_data[$field_name] = array(
-      'field'    => $field,
-      'instance' => $instance,
-    );
-
-    return $fields_data;
   }
+}
+
+/**
+ * Implements hook_install().
+ */
+function flipbook_3d_install() {
+  node_types_rebuild();
+  $node_types = node_type_get_types();
+  foreach ($node_types as $type) {
+    try {
+      switch ($type->type) {
+        case 'flipbook_3d':
+          // Fields.
+          field_create_field(
+            _flipbook_3d_fields()['field_flipbook_3d_cover']['field']
+          );
+          field_create_instance(
+            _flipbook_3d_fields()['field_flipbook_3d_cover']['instance']
+          );
+          field_create_field(
+            _flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['field']
+          );
+          field_create_instance(
+            _flipbook_3d_fields()['field_flipbook_3d_pdf_pages']['instance']
+          );
+          field_create_field(
+            _flipbook_3d_fields()['field_flipbook_3d_pages']['field']
+          );
+          field_create_instance(
+            _flipbook_3d_fields()['field_flipbook_3d_pages']['instance']
+          );
+          variable_set('comment_flipbook_3d', COMMENT_NODE_CLOSED);
+          variable_set('node_options_flipbook_3d', array('status'));
+          variable_set('node_submitted_flipbook_3d', 0);
+          break;
+        case 'flipbook_3d_page':
+          // Fields.
+          field_create_field(
+            _flipbook_3d_fields()['field_flipbook_3d_page_thumb']['field']
+          );
+          field_create_instance(
+            _flipbook_3d_fields()['field_flipbook_3d_page_thumb']['instance']
+          );
+          field_create_field(
+            _flipbook_3d_fields()['field_flipbook_3d_page']['field']
+          );
+          field_create_instance(
+            _flipbook_3d_fields()['field_flipbook_3d_page']['instance']
+          );
+          variable_set('comment_flipbook_3d_page', COMMENT_NODE_CLOSED);
+          variable_set('node_options_flipbook_3d_page', array('status'));
+          variable_set('node_submitted_flipbook_3d_page', 0);
+          break;
+      }
+    } catch (Exception $e) {
+      watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function flipbook_3d_uninstall() {
+  drupal_load('module', 'flipbook_3d');
+  $node_types = flipbook_3d_node_info();
+  foreach ($node_types as $type => $info) {
+    try {
+      $sql = 'SELECT n.nid FROM {node} n WHERE n.type = :type;';
+      $result = db_query($sql, array(':type' => $type));
+      $nids = array();
+      foreach ($result as $row) {
+        $nids[] = $row->nid;
+      }
+      node_delete_multiple($nids);
+      variable_del("comment_$type");
+      variable_del("node_options_$type");
+      variable_del("node_submitted_$type");
+      foreach (_flipbook_3d_fields() as $field_name => $data) {
+        switch ($data['instance']['bundle']) {
+          case $type:
+            try {
+              field_delete_field($field_name);
+              field_delete_instance($data['instance']);
+            } catch (Exception $e) {
+              watchdog(
+                'debug', $e->getMessage() . ' >> ' . $e->getTraceAsString()
+              );
+            }
+            break;
+        }
+      }
+    } catch (Exception $e) {
+      watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
+    }
+  }
+  db_delete('variable')->condition('name', 'flipbook_3d_%', 'LIKE');
+}
+
+function _flipbook_3d_fields() {
+  // Save fields here to return
+  $fields_data = array();
+
+  // Magazine cover
+  $field_name = 'field_flipbook_3d_cover';
+
+  $settings = array(
+    'file_extensions' => 'png jpg',
+    'file_directory'  => 'flipbook_3d_files/covers',
+  );
+
+  $field = array(
+    'field_name'  => $field_name,
+    'cardinality' => 1,
+    'type'        => 'image',
+    'uri_scheme'  => 'public',
+    'settings'    => $settings,
+  );
+
+  $instance = array(
+    'field_name'  => $field_name,
+    'entity_type' => 'node',
+    'bundle'      => 'flipbook_3d',
+    'label'       => t('Cover'),
+    'required'    => TRUE,
+    'description' => t('Upload the flipbook cover.'),
+    'widget'      => array(
+      'type' => 'image_image',
+    ),
+    'settings'    => $settings,
+    'display'     => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type'  => 'image',
+      ),
+    ),
+  );
+
+  $fields_data[$field_name] = array(
+    'field'    => $field,
+    'instance' => $instance,
+  );
+
+  // Magazine pages by PDF
+  $field_name = 'field_flipbook_3d_pdf_pages';
+
+  $settings = array(
+    'file_extensions' => 'pdf',
+    'file_directory'  => 'flipbook_3d_files/pages/pdf',
+  );
+
+  $field = array(
+    'field_name'  => $field_name,
+    'cardinality' => 1,
+    'type'        => 'file',
+    'settings'    => $settings,
+  );
+
+  $instance = array(
+    'field_name'  => $field_name,
+    'entity_type' => 'node',
+    'bundle'      => 'flipbook_3d',
+    'label'       => t('PDF book'),
+    'required'    => FALSE,
+    'description' => t(
+      'Upload a PDF file if you wish to create pages through this method. This overrides pages created through images.'
+    ),
+    'widget'      => array(
+      'type' => 'file_generic',
+    ),
+    'settings'    => $settings,
+    'display'     => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type'  => 'file_default',
+      ),
+    ),
+  );
+
+  $fields_data[$field_name] = array(
+    'field'    => $field,
+    'instance' => $instance,
+  );
+
+  // Magazine pages
+  $field_name = 'field_flipbook_3d_pages';
+
+  $settings = array(
+    'target_type'      => 'node',
+    'handler_settings' => array('target_bundles' => array('flipbook_3d_page')),
+  );
+
+  $field = array(
+    'field_name'  => $field_name,
+    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    'type'        => 'entityreference',
+    'settings'    => $settings,
+  );
+
+  $instance = array(
+    'field_name'  => $field_name,
+    'entity_type' => 'node',
+    'bundle'      => 'flipbook_3d',
+    'label'       => t('Pages'),
+    'required'    => FALSE,
+    'description' => t('Add pages via PNG or JPG images.'),
+    'widget'      => array(
+      'type'     => 'inline_entity_form',
+      'settings' => array(
+        'type_settings' => array(
+          'allow_new'         => TRUE,
+          'delete_references' => TRUE,
+        ),
+      ),
+    ),
+    'settings'    => $settings,
+    'display'     => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'entityreference_label',
+      ),
+    ),
+  );
+
+  $fields_data[$field_name] = array(
+    'field'    => $field,
+    'instance' => $instance,
+  );
+
+  // Magazine page thumb
+  $field_name = 'field_flipbook_3d_page_thumb';
+
+  $settings = array(
+    'file_extensions' => 'png jpg',
+    'file_directory'  => 'flipbook_3d_files/thumbnails',
+  );
+
+  $field = array(
+    'field_name'  => $field_name,
+    'cardinality' => 1,
+    'type'        => 'image',
+    'uri_scheme'  => 'public',
+    'settings'    => $settings,
+  );
+
+  $instance = array(
+    'field_name'  => $field_name,
+    'entity_type' => 'node',
+    'bundle'      => 'flipbook_3d_page',
+    'label'       => t('Thumbnail'),
+    'required'    => TRUE,
+    'description' => t('Upload the page thumbnail.'),
+    'widget'      => array(
+      'type' => 'image_image',
+    ),
+    'settings'    => $settings,
+    'display'     => array(
+      'default' => array(
+        'label' => 'hidden', 'type' => 'image',
+      ),
+    ),
+  );
+
+  $fields_data[$field_name] = array(
+    'field'    => $field,
+    'instance' => $instance,
+  );
+
+  // Magazine page page
+  $field_name = 'field_flipbook_3d_page';
+
+  $settings = array(
+    'file_extensions' => 'png jpg',
+    'file_directory'  => 'flipbook_3d_files/pages/images',
+  );
+
+  $field = array(
+    'field_name'  => $field_name,
+    'cardinality' => 1,
+    'type'        => 'image',
+    'uri_scheme'  => 'public',
+    'settings'    => $settings,
+  );
+
+  $instance = array(
+    'field_name'  => $field_name,
+    'entity_type' => 'node',
+    'bundle'      => 'flipbook_3d_page',
+    'label'       => t('Page'),
+    'required'    => TRUE,
+    'description' => t('Upload the page.'),
+    'widget'      => array(
+      'type' => 'image_image',
+    ),
+    'settings'    => $settings,
+    'display'     => array(
+      'default' => array(
+        'label' => 'hidden', 'type' => 'image',
+      ),
+    ),
+  );
+
+  $fields_data[$field_name] = array(
+    'field'    => $field,
+    'instance' => $instance,
+  );
+
+  return $fields_data;
+}

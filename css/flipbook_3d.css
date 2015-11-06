@@ -1,27 +1,27 @@
 #page #flipbook-3d-settings-form #settings-left,
 #page #flipbook-3d-settings-form #settings-right {
-    float: left;
-    min-width: 600px;
-    padding: 1%;
-    width: 48%;
+  float: left;
+  min-width: 600px;
+  padding: 1%;
+  width: 48%;
 }
 
 #page #flipbook-3d-settings-form .form-item {
-    border: 2px solid grey;
-    border-radius: 5px;
-    padding: 5px 10px;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding: 5px 10px;
 }
 
 .clear {
-    clear: both;
+  clear: both;
 }
 
 #flipbook-3d-node-form #ief-entity-table-edit-field-flipbook-3d-pages-und-entities .field-name-field-flipbook-3d-page-thumb img {
-    height: 64px;
-    width: auto;
+  height: 64px;
+  width: auto;
 }
 
 #flipbook-3d-node-form #ief-entity-table-edit-field-flipbook-3d-pages-und-entities .field-name-field-flipbook-3d-page img {
-    height: 64px;
-    width: auto;
+  height: 64px;
+  width: auto;
 }

@@ -51,6 +51,7 @@
    * @return array
    */
   function flipbook_3d_requirements($phase) {
+    $t = get_t();
     switch ($phase) {
       case 'install':
         return _flipbook_3d_check_lib_path();
@@ -60,9 +61,9 @@
         if (isset($library['installed']) && $library['installed']) {
           return array(
             'flipbook_3d' => array(
-              'title'       => t('Real 3D Flipbook'),
+              'title'       => $t('Real 3D Flipbook'),
               'value'       => '',
-              'description' => t('The Real 3D Flipbook library is installed.'),
+              'description' => $t('The Real 3D Flipbook library is installed.'),
               'severity'    => REQUIREMENT_OK,
             ),
           );
@@ -70,9 +71,9 @@
         else {
           return array(
             'flipbook_3d' => array(
-              'title'       => t('Real 3D Flipbook'),
+              'title'       => $t('Real 3D Flipbook'),
               'value'       => '',
-              'description' => t(
+              'description' => $t(
                 'The Real 3D Flipbook library was not found. Extract files so that they reside at <i>sites/all/libraries/real-3d-flipbook</i> and check status afterwards.'
               ),
               'severity'    => REQUIREMENT_ERROR,
@@ -165,7 +166,6 @@
         variable_del("comment_$type");
         variable_del("node_options_$type");
         variable_del("node_submitted_$type");
-        // node_type_delete($type);
         foreach (_flipbook_3d_fields() as $field_name => $data) {
           switch ($data['instance']['bundle']) {
             case $type:
@@ -184,8 +184,7 @@
         watchdog('debug', $e->getMessage() . ' >> ' . $e->getTraceAsString());
       }
     }
-    db_query("DELETE FROM {variable} WHERE {variable}.name LIKE 'flipbook_3d_%';");
-    // node_types_rebuild();
+    db_delete('variable')->condition('name', 'flipbook_3d_%', 'LIKE');
   }
 
   function _flipbook_3d_fields() {

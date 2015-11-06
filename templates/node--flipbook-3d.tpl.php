@@ -113,9 +113,9 @@
       switch ($view_mode) :
         case 'full': ?>
           <link rel="stylesheet" type="text/css"
-                href="<?php print variable_get('flipbook_3d_style_css', _get_library_url() . '/deploy/css/flipbook.style.css'); ?>">
+                href="<?php print check_plain(variable_get('flipbook_3d_style_css', _get_library_url() . '/deploy/css/flipbook.style.css')); ?>">
           <link rel="stylesheet" type="text/css"
-                href="<?php print variable_get('flipbook_3d_font_css', _get_library_url() . '/deploy/css/font-awesome.css'); ?>">
+                href="<?php print check_plain(variable_get('flipbook_3d_font_css', _get_library_url() . '/deploy/css/font-awesome.css')); ?>">
           <!--<script type="text/javascript" src="<?php /*print _get_module_url() . '/js/flipbook_3d.js'; */ ?>"></script>-->
         <?php
           $pdf = FALSE;
@@ -140,11 +140,11 @@
             foreach ($field_flipbook_3d_pages as $flipbook_3d_page) {
               /** @var DrupalLocalStreamWrapper $src_wrapper */
               $src_wrapper = file_stream_wrapper_get_instance_by_uri(
-                $flipbook_3d_page['entity']->field_flipbook_3d_page['und'][0]['uri']
+                $flipbook_3d_page['entity']->field_flipbook_3d_page[LANGUAGE_NONE][0]['uri']
               );
               /** @var DrupalLocalStreamWrapper $thumb_wrapper */
               $thumb_wrapper = file_stream_wrapper_get_instance_by_uri(
-                $flipbook_3d_page['entity']->field_flipbook_3d_page_thumb['und'][0]['uri']
+                $flipbook_3d_page['entity']->field_flipbook_3d_page_thumb[LANGUAGE_NONE][0]['uri']
               );
               $page = array(
                 'src'   => $src_wrapper->getExternalUrl(),
@@ -162,7 +162,7 @@
                 var options = {
                   <?php if($pdf) : ?>
                   pdfUrl: '<?php print $url; ?>',
-                  pdfPageScale: <?php print variable_get('flipbook_3d_pdf_page_scale' , '1.5'); ?>,
+                  pdfPageScale: <?php print check_plain(variable_get('flipbook_3d_pdf_page_scale' , '1.5')); ?>,
                   <?php elseif($images) : ?>
                   pages: [
                     <?php foreach($pages as $key => $page) : ?>
@@ -174,27 +174,27 @@
                     <?php endforeach; ?>
                   ],
                   <?php endif; ?>
-                  skin: '<?php print variable_get('flipbook_3d_skin', 'light'); ?>',
+                  skin: '<?php print check_plain(variable_get('flipbook_3d_skin', 'light')); ?>',
                   assets: {
-                    preloader: '<?php print variable_get('flipbook_3d_image_preloader', _get_library_url() . '/deploy/images/preloader.jpg'); ?>',
-                    overlay: '<?php print variable_get('flipbook_3d_image_overlay', _get_library_url() . '/deploy/images/overlay.jpg'); ?>',
-                    flipMp3: '<?php print variable_get('flipbook_3d_flip_mp3', _get_library_url() . '/deploy/mp3/turnPage.mp3'); ?>'
+                    preloader: '<?php print check_plain(variable_get('flipbook_3d_image_preloader', _get_library_url() . '/deploy/images/preloader.jpg')); ?>',
+                    overlay: '<?php print check_plain(variable_get('flipbook_3d_image_overlay', _get_library_url() . '/deploy/images/overlay.jpg')); ?>',
+                    flipMp3: '<?php print check_plain(variable_get('flipbook_3d_flip_mp3', _get_library_url() . '/deploy/mp3/turnPage.mp3')); ?>'
                   },
-                  rightToLeft: <?php print variable_get('flipbook_3d_rtl', 'false'); ?>,
-                  startPage: <?php print variable_get('flipbook_3d_start_page', '1'); ?>,
-                  sounds: <?php print variable_get('flipbook_3d_sounds', 'true'); ?>,
-                  pageWidth: <?php print variable_get('flipbook_3d_page_width', '1000'); ?>,
-                  pageHeight: <?php print variable_get('flipbook_3d_page_height', '1414'); ?>,
-                  thumbnailWidth: <?php print variable_get('flipbook_3d_thumb_width', '100'); ?>,
-                  thumbnailHeight: <?php print variable_get('flipbook_3d_thumb_height', '141'); ?>,
-                  contentOnStart: <?php print variable_get('flipbook_3d_content_on_start', 'false'); ?>,
-                  thumbnailsOnStart: <?php print variable_get('flipbook_3d_thumbs_on_start', 'false'); ?>,
+                  rightToLeft: <?php print check_plain(variable_get('flipbook_3d_rtl', 'false')); ?>,
+                  startPage: <?php print check_plain(variable_get('flipbook_3d_start_page', '1')); ?>,
+                  sounds: <?php print check_plain(variable_get('flipbook_3d_sounds', 'true')); ?>,
+                  pageWidth: <?php print check_plain(variable_get('flipbook_3d_page_width', '1000')); ?>,
+                  pageHeight: <?php print check_plain(variable_get('flipbook_3d_page_height', '1414')); ?>,
+                  thumbnailWidth: <?php print check_plain(variable_get('flipbook_3d_thumb_width', '100')); ?>,
+                  thumbnailHeight: <?php print check_plain(variable_get('flipbook_3d_thumb_height', '141')); ?>,
+                  contentOnStart: <?php print check_plain(variable_get('flipbook_3d_content_on_start', 'false')); ?>,
+                  thumbnailsOnStart: <?php print check_plain(variable_get('flipbook_3d_thumbs_on_start', 'false')); ?>,
                   mode: 'normal', // [String] You can select either 'normal', 'lightbox' or 'fullscreen'
-                  singlePageMode: <?php print variable_get('flipbook_3d_single_page', 'false'); ?>,
-                  viewMode: '<?php print variable_get('flipbook_3d_view_mode', '3d'); ?>',
-                  pageShadow1: <?php print variable_get('flipbook_3d_shadow_1', 'true'); ?>,
-                  pageShadow2: <?php print variable_get('flipbook_3d_shadow_2', 'true'); ?>,
-                  pageShadow3: <?php print variable_get('flipbook_3d_shadow_3', 'false'); ?>,
+                  singlePageMode: <?php print check_plain(variable_get('flipbook_3d_single_page', 'false')); ?>,
+                  viewMode: '<?php print check_plain(variable_get('flipbook_3d_view_mode', '3d')); ?>',
+                  pageShadow1: <?php print check_plain(variable_get('flipbook_3d_shadow_1', 'true')); ?>,
+                  pageShadow2: <?php print check_plain(variable_get('flipbook_3d_shadow_2', 'true')); ?>,
+                  pageShadow3: <?php print check_plain(variable_get('flipbook_3d_shadow_3', 'false')); ?>,
                   /* Mobile */
                   singlePageModeIfMobile: true, // [Boolean] if the single page view will be forced on mobile devices
                   pdfBrowserViewerIfMobile: true, // [Boolean] if instead of flipbook app browser will open pdf directly in its own default pdf viewer. For this option PDF url must be set.

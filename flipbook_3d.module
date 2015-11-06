@@ -26,7 +26,7 @@
     );
 
     $form['information'] = array(
-      '#markup' => '<div><p>' . t('Settings here reflect options you can modify on the jQuery plugin settings array. Proper functionality of the plugin can only be guaranteed by the plugin\'s author. That said, play with these options untill satisfied with the output.') . '</p></div>',
+      '#markup' => '<div><p>' . t('Settings here reflect options you can modify on the jQuery plugin settings array. Proper functionality of the plugin can only be guaranteed by the plugin\'s author. That said, play with these options until satisfied with the output.') . '</p></div>',
     );
 
     $form['settings'] = array(
@@ -351,12 +351,12 @@
     switch ($form_state['triggering_element']['#id']) {
       case 'edit-submit':
         $flipbook_from_pdf =
-          ($form_state['values']['field_flipbook_3d_pdf_pages']['und'][0]['fid'] == 0)
+          ($form_state['values']['field_flipbook_3d_pdf_pages'][LANGUAGE_NONE][0]['fid'] == 0)
             ? FALSE : TRUE;
         $flipbook_from_images =
-          isset($form_state['values']['field_flipbook_3d_pages']['und']['entities']);
+          isset($form_state['values']['field_flipbook_3d_pages'][LANGUAGE_NONE]['entities']);
         $par_pages = $flipbook_from_images ? (count(
-            $form_state['values']['field_flipbook_3d_pages']['und']['entities']
+            $form_state['values']['field_flipbook_3d_pages'][LANGUAGE_NONE]['entities']
           ) % 2 == 0) ? TRUE : FALSE : FALSE;
         if ($flipbook_from_pdf || $flipbook_from_images) {
           if ($flipbook_from_images && !$par_pages) {

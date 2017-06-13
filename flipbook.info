@@ -1,0 +1,6 @@
+name = Flipbook
+description = Adds dFlip PDF Flipbook jQuery plugin integration.
+core = 7.x
+package = Flipbook
+
+dependencies[] = libraries (>=2.x)

@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Provides integration with the dflip pdf flipbook jquery plugin.
+ */
+
+define("FLIPBOOK_COMPATIBLE_MAJOR_VERSION", '1');
+define("FLIPBOOK_DEBUG", variable_get('flipbook_debug', FALSE));
+
+/**
+ * Implements hook_libraries_info().
+ */
+function flipbook_libraries_info() {
+  $libraries['flipbook'] = array(
+    'name' => 'Flipbook',
+    'path' => '',
+    'vendor url' => 'http://flipbookplugin.com/',
+    'download url' => 'https://codecanyon.net/item/dflip-flipbook-jquery-plugin/15834127',
+    'version' => '1.0',
+    // @TODO match version constraints when we have the production
+    // version of plugin. Currently this is rough approximation.
+    'files' => array(
+      'js' => array(
+        'js/dflip.js',
+      ),
+      'css' => array(
+        'css/dflip.css',
+        'css/themify-icons.css',
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function flipbook_permission() {
+  return array(
+    'administer flipbook' => array(
+      'title' => t('Configure flipbook settings.'),
+    ),
+  );
+}

@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functionality for flipbook.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function flipbook_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+
+  // Check to see if the flipbook library is available.
+  if ($phase == 'runtime') {
+    $library = libraries_detect('flipbook');
+
+    if ($library['installed']) {
+      $version = explode('.', $library['version']);
+
+      if ($version[0] == FLIPBOOK_COMPATIBLE_MAJOR_VERSION) {
+        $requirements['flipbook'] = array(
+          'value' => $library['version'],
+          'severity' => REQUIREMENT_OK,
+        );
+      }
+      else {
+        $requirements['flipbook'] = array(
+          'value' => $library['version'],
+          'description' => $t('Incompatible version detected. The flipbook 
+          library version must be from the %version.x branch.',
+            array('%version' => FLIPBOOK_COMPATIBLE_MAJOR_VERSION)),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
+    }
+    else {
+      $requirements['flipbook'] = array(
+        'value' => $t('Flipbook library not found.'),
+        'description' => $t('The flipbook library could not be detected. 
+        Please consult the README.md for installation instructions.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+
+    $requirements['flipbook']['title'] = $t('Flipbook');
+  }
+
+  return $requirements;
+}
